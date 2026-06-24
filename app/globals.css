@@ -1,0 +1,197 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ConsensusAI is dark-mode only. These are defined on :root and the
+       .dark class is applied permanently on <html> in the layout. */
+    --background: 222 47% 4%;
+    --foreground: 210 40% 96%;
+
+    --card: 222 40% 7%;
+    --card-foreground: 210 40% 96%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 6%;
+
+    --secondary: 222 30% 14%;
+    --secondary-foreground: 210 40% 92%;
+
+    --muted: 222 24% 12%;
+    --muted-foreground: 215 18% 60%;
+
+    --accent: 222 30% 14%;
+    --accent-foreground: 210 40% 96%;
+
+    --border: 217 25% 16%;
+    --input: 217 25% 16%;
+    --ring: 217 91% 60%;
+
+    --radius: 0.9rem;
+
+    /* Per-agent identity hues. The council's whole visual logic
+       (hero orbs, cards, timeline) is built from these. */
+    --agent-trust: 217 91% 60%;       /* electric blue   */
+    --agent-momentum: 262 83% 66%;    /* violet          */
+    --agent-volatility: 38 92% 55%;   /* amber           */
+    --agent-liquidity: 168 76% 47%;   /* teal            */
+    --agent-consensus: 190 95% 55%;   /* cyan (the blend) */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: hsl(var(--agent-consensus) / 0.25);
+    color: hsl(var(--foreground));
+  }
+
+  /* Quiet, premium scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 999px;
+    border: 3px solid hsl(var(--background));
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+}
+
+@layer components {
+  /* Glassmorphism surface — the base material of the product */
+  .glass {
+    background: linear-gradient(
+      180deg,
+      hsl(222 40% 10% / 0.7) 0%,
+      hsl(222 44% 6% / 0.55) 100%
+    );
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid hsl(var(--border) / 0.8);
+  }
+
+  .glass-hover {
+    transition: border-color 0.3s ease, transform 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+  .glass-hover:hover {
+    border-color: hsl(var(--agent-consensus) / 0.45);
+    box-shadow: 0 0 0 1px hsl(var(--agent-consensus) / 0.1),
+      0 20px 60px -25px hsl(var(--agent-consensus) / 0.35);
+  }
+
+  /* Gradient text — used sparingly for the consensus thesis */
+  .text-gradient {
+    background: linear-gradient(
+      100deg,
+      hsl(var(--foreground)) 0%,
+      hsl(var(--agent-consensus)) 55%,
+      hsl(var(--agent-momentum)) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Animated gradient border (for the primary CTA / featured cards) */
+  .gradient-border {
+    position: relative;
+    background: hsl(var(--card));
+    border-radius: var(--radius);
+  }
+  .gradient-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(
+      130deg,
+      hsl(var(--agent-trust)),
+      hsl(var(--agent-consensus)),
+      hsl(var(--agent-momentum))
+    );
+    background-size: 200% 200%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: border-flow 6s ease infinite;
+    pointer-events: none;
+  }
+
+  /* Eyebrow label — structural device used above section headings */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-border/80
+      bg-secondary/40 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em]
+      text-muted-foreground;
+  }
+}
+
+@layer utilities {
+  /* Ambient grid — the "command center" floor */
+  .bg-grid {
+    background-image: linear-gradient(
+        to right,
+        hsl(var(--border) / 0.35) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, hsl(var(--border) / 0.35) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .mask-fade-b {
+    mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+  }
+
+  .mask-radial {
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 40%, transparent 100%);
+    -webkit-mask-image: radial-gradient(
+      ellipse 70% 60% at 50% 40%,
+      black 40%,
+      transparent 100%
+    );
+  }
+
+  .glow-consensus {
+    box-shadow: 0 0 80px -10px hsl(var(--agent-consensus) / 0.5);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

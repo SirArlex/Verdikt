@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   title: "Verdikt — A council of agents for trading decisions",
   description:
     "Verdikt runs four specialized agents over any token, lets a moderator weigh their debate, and resolves a single verdict you can actually trust.",
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
   openGraph: {
     title: "Verdikt",
     description:
